@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
+import { Circle } from "react-preloaders";
 import inMemoryJWT from "../services/inMemoryJWT";
 import config from "../config";
 import style from "../app.module.scss";
@@ -107,11 +107,11 @@ const AuthProvider = ({ children }) => {
         isUserLogged,
       }}
     >
-      {isAppReady ? (
+      {false ? (
         children
       ) : (
-        <div className={style.center}>
-          <CircularProgress />
+        <div className={style.centered}>
+          <Circle />
         </div>
       )}
     </AuthContext.Provider>
