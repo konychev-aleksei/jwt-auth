@@ -8,31 +8,20 @@ import style from "./app.module.scss";
 import { AuthContext } from "./context/AuthContext";
 
 const App = () => {
-  const { isUserLogged } = useContext(AuthContext);
-
   return (
     <div className={style.wrapper}>
       <SnackbarProvider />
       <BrowserRouter>
-        {!isUserLogged && (
-          <nav className={style.nav}>
-            <Link to="sign-in">Вход</Link>
-            <Link to="sign-up">Регистрация</Link>
-          </nav>
-        )}
+        <nav className={style.nav}>
+          <Link to="sign-in">Вход</Link>
+          <Link to="sign-up">Регистрация</Link>
+          <Link to="sign-in">Демо</Link>
+        </nav>
         <Routes>
-          {isUserLogged ? (
-            <Route path="demo" element={<Demo />} />
-          ) : (
-            <>
-              <Route path="sign-in" element={<SignIn />} />
-              <Route path="sign-up" element={<SignUp />} />
-            </>
-          )}
-          <Route  
-            path="*"
-            element={<Navigate to={isUserLogged ? "demo" : "sign-in"} />}
-          />
+          <Route path="demo" element={<Demo />} />
+          <Route path="sign-in" element={<SignIn />} />
+          <Route path="sign-up" element={<SignUp />} />
+          <Route path="*" element={<Navigate to={"sign-in"} />} />
         </Routes>
       </BrowserRouter>
     </div>
