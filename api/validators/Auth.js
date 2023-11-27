@@ -3,24 +3,22 @@ import * as Yup from "yup";
 
 export const signInSchema = Yup.object({
   body: Yup.object({
-    userName: Yup.string()
-      .required("Поле обязательно!")
-      .typeError("Значение должно быть строкой!"),
-    password: Yup.string()
-      .required("Поле обязательно!")
-      .min(3, "Пароль слишком короткий - минимум 3 символа"),
+    userName: Yup.string().required("Поле обязательно!"),
+    password: Yup.string().required("Поле обязательно!"),
   }),
 });
 
-export const signUpSchema = signInSchema.concat(
-  Yup.object({
-    body: Yup.object({
-      role: Yup.number()
-        .required("Поле обязательно!")
-        .typeError("Значение должно быть числом!"),
-    }),
-  })
-);
+export const signUpSchema = Yup.object({
+  body: Yup.object({
+    userName: Yup.string().required("Поле обязательно!"),
+    password: Yup.string()
+      .required("Поле обязательно!")
+      .min(3, "Пароль слишком короткий - минимум 3 символа"),
+    role: Yup.number()
+      .required("Поле обязательно!")
+      .typeError("Значение должно быть числом!"),
+  }),
+});
 
 export const refreshTokenRequiredSchema = Yup.object({
   cookies: Yup.object({
