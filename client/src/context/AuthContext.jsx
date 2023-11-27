@@ -92,6 +92,7 @@ const AuthProvider = ({ children }) => {
       })
       .catch(() => {
         setIsAppReady(true);
+        setIsUserLogged(false);
       });
   }, []);
 
