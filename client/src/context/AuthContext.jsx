@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { Circle } from "react-preloaders";
 import inMemoryJWT from "../services/inMemoryJWT";
 import config from "../config";
 import style from "../app.module.scss";
