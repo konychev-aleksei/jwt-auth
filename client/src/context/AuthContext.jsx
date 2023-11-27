@@ -28,13 +28,7 @@ const AuthProvider = ({ children }) => {
         handleLogOut,
       }}
     >
-      {isAppReady ? (
-        children
-      ) : (
-        <div className={style.centered}>
-          <CircularProgress />
-        </div>
-      )}
+      {children}
     </AuthContext.Provider>
   );
 };
