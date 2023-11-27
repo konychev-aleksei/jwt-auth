@@ -15,7 +15,7 @@ const App = () => {
         <nav className={style.nav}>
           <Link to="sign-in">Вход</Link>
           <Link to="sign-up">Регистрация</Link>
-          <Link to="sign-in">Демо</Link>
+          <Link to="demo">Демо</Link>
         </nav>
         <Routes>
           <Route path="demo" element={<Demo />} />
