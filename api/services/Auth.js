@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import TokenService from "./Token.js";
 import { NotFound, Forbidden, Conflict } from "../utils/Errors.js";
-import RefreshSessionsRepository from "../repositories/RefreshSession.js";
+import RefreshSessionRepository from "../repositories/RefreshSession.js";
 import UserRepository from "../repositories/User.js";
 import { ACCESS_TOKEN_EXPIRATION } from "../constants.js";
 
@@ -16,7 +16,7 @@ class AuthService {
     const isPasswordValid = bcrypt.compareSync(password, userData.password);
 
     if (!isPasswordValid) {
-      throw new Forbidden("Неверный логин или пароль!");
+      throw new Forbidden("Неверное имя или пароль!");
     }
 
     const payload = { userName, role: userData.role, id: userData.id };
@@ -24,7 +24,7 @@ class AuthService {
     const accessToken = await TokenService.generateAccessToken(payload);
     const refreshToken = await TokenService.generateRefreshToken(payload);
 
-    await RefreshSessionsRepository.createRefreshSession({
+    await RefreshSessionRepository.createRefreshSession({
       userName,
       refreshToken,
       fingerprint,
@@ -55,7 +55,7 @@ class AuthService {
     const accessToken = await TokenService.generateAccessToken(payload);
     const refreshToken = await TokenService.generateRefreshToken(payload);
 
-    await RefreshSessionsRepository.createRefreshSession({
+    await RefreshSessionRepository.createRefreshSession({
       id,
       refreshToken,
       fingerprint,
@@ -69,46 +69,42 @@ class AuthService {
   }
 
   static async logOut(refreshToken) {
-    await RefreshSessionsRepository.deleteRefreshSession(refreshToken);
+    await RefreshSessionRepository.deleteRefreshSession(refreshToken);
   }
 
   static async refresh({ fingerprint, currentRefreshToken }) {
-    const refreshSessions = await RefreshSessionsRepository.getRefreshSession(
+    const refreshSession = await RefreshSessionRepository.getRefreshSession(
       currentRefreshToken
     );
 
-    if (!refreshSessions.length) {
+    if (!refreshSession.length) {
       throw new Forbidden();
     }
 
-    if (refreshSession[0].finger_print !== fingerprint.hash) {
+    if (refreshSession.finger_print !== fingerprint.hash) {
       console.log("Несанкционированная попытка обновления токенов");
       throw new Forbidden();
     }
 
-    await RefreshSessionsRepository.deleteRefreshSession(currentRefreshToken);
+    await RefreshSessionRepository.deleteRefreshSession(currentRefreshToken);
 
     let payload;
     try {
-      const { id, userName, role } = await jwt.verify(
-        currentRefreshToken,
-        process.env.REFRESH_TOKEN_SECRET
-      );
-
-      payload = {
-        id,
-        userName,
-        role,
-      };
+      payload = await TokenService.verifyRefreshToken(currentRefreshToken);
     } catch (error) {
       throw new Forbidden(error);
     }
 
-    const accessToken = await TokenService.generateAccessToken(payload);
-    const refreshToken = await TokenService.generateRefreshToken(payload);
+    const { id, userName, role } = await UserRepository.getUserData(
+      payload.userName
+    );
+    const actualPayload = { id, userName, role };
 
-    await RefreshSessionsRepository.createRefreshSession({
-      id: payload.id,
+    const accessToken = await TokenService.generateAccessToken(actualPayload);
+    const refreshToken = await TokenService.generateRefreshToken(actualPayload);
+
+    await RefreshSessionRepository.createRefreshSession({
+      id,
       refreshToken,
       fingerprint,
     });

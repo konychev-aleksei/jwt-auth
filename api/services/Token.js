@@ -17,6 +17,14 @@ class TokenService {
     });
   }
 
+  static async validateAccessToken(payload) {
+    return await jwt.verify(payload, process.env.ACCESS_TOKEN_SECRET);
+  }
+
+  static async validateRefreshToken(payload) {
+    return await jwt.verify(payload, process.env.REFRESH_TOKEN_SECRET);
+  }
+
   static async checkAccess(req, _, next) {
     const authHeader = req.headers.authorization;
     const token = authHeader?.split(" ")?.[1];
@@ -25,16 +33,15 @@ class TokenService {
       return next(new Unauthorized());
     }
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-      console.log(err, user);
+    try {
+      req.user = await TokenService.validateAccessToken(token);
+      console.log(req.user);
+    } catch (error) {
+      console.log(error);
+      return next(new Forbidden(error));
+    }
 
-      if (err) {
-        return next(new Forbidden());
-      }
-
-      req.user = user;
-      next();
-    });
+    next();
   }
 }
 
