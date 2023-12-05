@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import TokenService from "./Token.js";
 import { NotFound, Forbidden, Conflict } from "../utils/Errors.js";
-import RefreshSessionsRepository from "../repositories/RefreshSessions.js";
+import RefreshSessionsRepository from "../repositories/RefreshSession.js";
 import UserRepository from "../repositories/User.js";
 import { ACCESS_TOKEN_EXPIRATION } from "../constants.js";
 
