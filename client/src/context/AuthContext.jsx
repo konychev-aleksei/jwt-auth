@@ -81,7 +81,7 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const storageListener = window.addEventListener("storage", (event) => {
+    window.addEventListener("storage", (event) => {
       if (event.key === config.LOGOUT_STORAGE_KEY) {
         inMemoryJWT.deleteToken();
         setIsUserLogged(false);
@@ -100,10 +100,6 @@ const AuthProvider = ({ children }) => {
         setIsAppReady(true);
         setIsUserLogged(false);
       });
-
-    return () => {
-      window.removeEventListener(storageListener);
-    };
   }, []);
 
   return (
