@@ -1,12 +1,12 @@
+import config from "../config";
 import { AuthClient } from "../context/AuthContext";
 
 const inMemoryJWTService = () => {
   let inMemoryJWT = null;
-  let refreshTimeoutId;
-  const storageKey = "logout";
+  let refreshTimeoutId = null;
 
   window.addEventListener("storage", (event) => {
-    if (event.key === storageKey) {
+    if (event.key === config.LOGOUT_STORAGE_KEY) {
       inMemoryJWT = null;
     }
   });
@@ -40,7 +40,7 @@ const inMemoryJWTService = () => {
   const deleteToken = () => {
     inMemoryJWT = null;
     abortRefreshToken();
-    localStorage.setItem(storageKey, Date.now());
+    localStorage.setItem(config.LOGOUT_STORAGE_KEY, Date.now());
   };
 
   return {

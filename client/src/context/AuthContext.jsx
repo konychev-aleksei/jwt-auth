@@ -6,7 +6,7 @@ import config from "../config";
 import style from "../app.module.scss";
 import showErrorMessage from "../utils/showErrorMessage";
 
-const ResourceClient = axios.create({
+export const ResourceClient = axios.create({
   baseURL: `${config.API_URL}/resource`,
 });
 
@@ -19,11 +19,10 @@ ResourceClient.interceptors.request.use(
   (config) => {
     const accessToken = inMemoryJWT.getToken();
 
-    if (!accessToken) {
-      return config;
+    if (accessToken) {
+      config.headers["Authorization"] = "Bearer " + accessToken;
     }
 
-    config.headers["Authorization"] = "Bearer " + accessToken;
     return config;
   },
   (error) => {
@@ -82,6 +81,13 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    const storageListener = window.addEventListener("storage", (event) => {
+      if (event.key === config.LOGOUT_STORAGE_KEY) {
+        inMemoryJWT.deleteToken();
+        setIsUserLogged(false);
+      }
+    });
+
     AuthClient.post("/refresh")
       .then((res) => {
         const { accessToken, accessTokenExpiration } = res.data;
@@ -94,6 +100,10 @@ const AuthProvider = ({ children }) => {
         setIsAppReady(true);
         setIsUserLogged(false);
       });
+
+    return () => {
+      window.removeEventListener(storageListener);
+    };
   }, []);
 
   return (
@@ -104,10 +114,11 @@ const AuthProvider = ({ children }) => {
         handleSignUp,
         handleSignIn,
         handleLogOut,
+        isAppReady,
         isUserLogged,
       }}
     >
-      {false ? (
+      {isAppReady ? (
         children
       ) : (
         <div className={style.centered}>
