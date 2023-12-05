@@ -20,7 +20,7 @@ ResourceClient.interceptors.request.use(
     const accessToken = inMemoryJWT.getToken();
 
     if (accessToken) {
-      config.headers["Authorization"] = "Bearer " + accessToken;
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
 
     return config;
