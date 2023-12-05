@@ -1,10 +1,10 @@
 import pg from "pg";
 
 const pool = new pg.Pool({
-  user: "wcjtnoro",
-  password: "z8K3e-ylyfcjeJTt1nZG4K6Q-7pjXC0R",
+  user: "fycnakwm",
+  password: "lBFrfgrBCos2J0Es8lABldD3_PFt6OMv",
   host: "cornelius.db.elephantsql.com",
-  database: "wcjtnoro",
+  database: "fycnakwm",
 });
 
 export default pool;

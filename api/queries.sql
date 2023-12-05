@@ -1,15 +1,15 @@
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
-    name NOT NULL VARCHAR(25) UNIQUE,
-    password NOT NULL VARCHAR(60),
-    role NOT NULL SMALLINT
+    name VARCHAR(25) UNIQUE NOT NULL,
+    password VARCHAR(60) NOT NULL,
+    role SMALLINT NOT NULL
 );
 
 CREATE TABLE refresh_sessions(
     id SERIAL PRIMARY KEY,
-    user_id NOT NULL INT REFERENCES users(id) ON DELETE CASCADE,
-    refresh_token NOT NULL VARCHAR(400),
-    finger_print NOT NULL VARCHAR(32)  
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    refresh_token VARCHAR(400) NOT NULL,
+    finger_print VARCHAR(32) NOT NULL
 );
 
 SELECT * FROM users;
