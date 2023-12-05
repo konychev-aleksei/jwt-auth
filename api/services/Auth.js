@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import TokenService from "./Token.js";
 import { NotFound, Forbidden, Conflict } from "../utils/Errors.js";
-import RefreshSessionsRepository from "../repositories/RefreshSessions.js";
+import RefreshSessionsRepository from "../repositories/RefreshSession.js";
 import UserRepository from "../repositories/User.js";
 import { ACCESS_TOKEN_EXPIRATION } from "../constants.js";
 
@@ -13,11 +13,7 @@ class AuthService {
       throw new NotFound("Пользователь не найден!");
     }
 
-    const hashedPassword = bcrypt.hashSync(password, 8);
-    const isPasswordValid = bcrypt.compareSync(
-      hashedPassword,
-      userData.password
-    );
+    const isPasswordValid = bcrypt.compareSync(password, userData.password);
 
     if (!isPasswordValid) {
       throw new Forbidden("Неверный логин или пароль!");
@@ -77,7 +73,7 @@ class AuthService {
   }
 
   static async refresh({ fingerprint, currentRefreshToken }) {
-    const refreshSessions = await RefreshSessionsRepository.getRefreshSessions(
+    const refreshSessions = await RefreshSessionsRepository.getRefreshSession(
       currentRefreshToken
     );
 
