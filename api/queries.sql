@@ -1,19 +1,16 @@
-CREATE TABLE user(
+CREATE TABLE users(
     id SERIAL PRIMARY KEY,
-    name VARCHAR(25) UNIQUE,
-    password VARCHAR(100),
-    role SMALLINT
+    name NOT NULL VARCHAR(25) UNIQUE,
+    password NOT NULL VARCHAR(60),
+    role NOT NULL SMALLINT
 );
 
-CREATE TABLE refresh_session(
+CREATE TABLE refresh_sessions(
     id SERIAL PRIMARY KEY,
-    user_id SERIAL REFERENCES user(id) ON DELETE CASCADE,
-    refresh_token VARCHAR(400) NOT NULL,
-    finger_print VARCHAR(400) NOT NULL 
+    user_id NOT NULL INT REFERENCES users(id) ON DELETE CASCADE,
+    refresh_token NOT NULL VARCHAR(400),
+    finger_print NOT NULL VARCHAR(32)  
 );
 
-DROP TABLE user CASCADE;
-DROP TABLE refresh_session;
-
-SELECT * FROM user;
-SELECT * FROM refresh_session;
+SELECT * FROM users;
+SELECT * FROM refresh_sessions;
