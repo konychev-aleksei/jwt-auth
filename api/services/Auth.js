@@ -1,7 +1,12 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import TokenService from "./Token.js";
-import { NotFound, Forbidden, Conflict } from "../utils/Errors.js";
+import {
+  NotFound,
+  Forbidden,
+  Conflict,
+  Unauthorized,
+} from "../utils/Errors.js";
 import RefreshSessionRepository from "../repositories/RefreshSession.js";
 import UserRepository from "../repositories/User.js";
 import { ACCESS_TOKEN_EXPIRATION } from "../constants.js";
@@ -73,6 +78,10 @@ class AuthService {
   }
 
   static async refresh({ fingerprint, currentRefreshToken }) {
+    if (!currentRefreshToken) {
+      throw new Unauthorized();
+    }
+
     const refreshSession = await RefreshSessionRepository.getRefreshSession(
       currentRefreshToken
     );
@@ -95,9 +104,12 @@ class AuthService {
       throw new Forbidden(error);
     }
 
-    const { id, userName, role } = await UserRepository.getUserData(
-      payload.userName
-    );
+    const {
+      id,
+      role,
+      name: userName,
+    } = await UserRepository.getUserData(payload.userName);
+
     const actualPayload = { id, userName, role };
 
     const accessToken = await TokenService.generateAccessToken(actualPayload);

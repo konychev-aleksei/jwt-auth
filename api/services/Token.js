@@ -17,11 +17,11 @@ class TokenService {
     });
   }
 
-  static async validateAccessToken(payload) {
+  static async verifyAccessToken(payload) {
     return await jwt.verify(payload, process.env.ACCESS_TOKEN_SECRET);
   }
 
-  static async validateRefreshToken(payload) {
+  static async verifyRefreshToken(payload) {
     return await jwt.verify(payload, process.env.REFRESH_TOKEN_SECRET);
   }
 
@@ -34,7 +34,7 @@ class TokenService {
     }
 
     try {
-      req.user = await TokenService.validateAccessToken(token);
+      req.user = await TokenService.verifyAccessToken(token);
       console.log(req.user);
     } catch (error) {
       console.log(error);
