@@ -77,7 +77,7 @@ class AuthService {
       currentRefreshToken
     );
 
-    if (!refreshSession.length) {
+    if (!refreshSession) {
       throw new Forbidden();
     }
 
