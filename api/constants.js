@@ -5,4 +5,4 @@ export const COOKIE_SETTINGS = {
   },
 };
 
-export const ACCESS_TOKEN_EXPIRATION = 18e5; // 1800 * 1000 (30 минут)
+export const ACCESS_TOKEN_EXPIRATION = 20000;// 18e5; // 1800 * 1000 (30 минут)

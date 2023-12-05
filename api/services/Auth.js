@@ -30,7 +30,7 @@ class AuthService {
     const refreshToken = await TokenService.generateRefreshToken(payload);
 
     await RefreshSessionRepository.createRefreshSession({
-      userName,
+      id: userData.id,
       refreshToken,
       fingerprint,
     });

@@ -15,7 +15,7 @@ const inMemoryJWTService = () => {
     const timeoutTrigger = expiration - 10000;
 
     refreshTimeoutId = setTimeout(() => {
-      AuthClient("/refresh")
+      AuthClient.post("/refresh")
         .then((res) => {
           const { accessToken, accessTokenExpiration } = res.data;
           setToken(accessToken, accessTokenExpiration);
