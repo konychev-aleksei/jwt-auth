@@ -5,6 +5,8 @@ import AuthRootRouter from "./routers/Auth.js";
 import TokenService from "./services/Token.js";
 import cookieParser from "cookie-parser";
 
+dotenv.config();
+
 const PORT = process.env.PORT || 5000;
 
 const app = express();
