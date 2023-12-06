@@ -6,6 +6,12 @@ import AuthRootRouter from "./routers/Auth.js";
 import TokenService from "./services/Token.js";
 import cookieParser from "cookie-parser";
 
+/* 
+* Перед запуском
+* в файле db.js необходимо заполнить 
+* поля для подключения к postgres
+*/ 
+
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
