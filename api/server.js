@@ -5,6 +5,8 @@ import AuthRootRouter from "./routers/Auth.js";
 import TokenService from "./services/Token.js";
 import cookieParser from "cookie-parser";
 
+const PORT = process.env.PORT || 5000;
+
 const app = express();
 
 app.use(cookieParser());
@@ -23,6 +25,6 @@ app.get("/resource/protected", TokenService.checkAccess, (_, res) => {
   res.status(200).json("Добро пожаловать!" + Date.now());
 });
 
-app.listen(5000, () => {
+app.listen(PORT, () => {
   console.log("Сервер успешно запущен");
 });
