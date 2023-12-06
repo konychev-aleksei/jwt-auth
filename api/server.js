@@ -20,7 +20,7 @@ app.use(
 app.use("/auth", AuthRootRouter);
 
 app.get("/resource/protected", TokenService.checkAccess, (_, res) => {
-  res.status(200).json(`Добро пожаловать!${Date.now()}`);
+  res.status(200).json("Добро пожаловать!" + Date.now());
 });
 
 app.listen(5000, () => {

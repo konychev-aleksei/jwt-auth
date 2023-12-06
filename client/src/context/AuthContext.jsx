@@ -6,13 +6,13 @@ import config from "../config";
 import style from "../app.module.scss";
 import showErrorMessage from "../utils/showErrorMessage";
 
-export const ResourceClient = axios.create({
-  baseURL: `${config.API_URL}/resource`,
-});
-
 export const AuthClient = axios.create({
   baseURL: `${config.API_URL}/auth`,
   withCredentials: true,
+});
+
+export const ResourceClient = axios.create({
+  baseURL: `${config.API_URL}/resource`,
 });
 
 ResourceClient.interceptors.request.use(
@@ -61,9 +61,7 @@ const AuthProvider = ({ children }) => {
       .then((res) => {
         const { accessToken, accessTokenExpiration } = res.data;
 
-        console.log(accessToken);
         inMemoryJWT.setToken(accessToken, accessTokenExpiration);
-
         setIsUserLogged(true);
       })
       .catch(showErrorMessage);
@@ -73,8 +71,8 @@ const AuthProvider = ({ children }) => {
     AuthClient.post("/sign-in", data)
       .then((res) => {
         const { accessToken, accessTokenExpiration } = res.data;
-        inMemoryJWT.setToken(accessToken, accessTokenExpiration);
 
+        inMemoryJWT.setToken(accessToken, accessTokenExpiration);
         setIsUserLogged(true);
       })
       .catch(showErrorMessage);

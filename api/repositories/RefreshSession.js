@@ -3,7 +3,7 @@ import pool from "../db.js";
 class RefreshSessionRepository {
   static async getRefreshSession(refreshToken) {
     const response = await pool.query(
-      "SELECT * FROM refresh_sessions WHERE refresh_token=$1", // snake case
+      "SELECT * FROM refresh_sessions WHERE refresh_token=$1",
       [refreshToken]
     );
 

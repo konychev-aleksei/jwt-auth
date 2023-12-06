@@ -13,7 +13,7 @@ class TokenService {
 
   static async generateRefreshToken(payload) {
     return await jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
-      expiresIn: "7d",
+      expiresIn: "15d",
     });
   }
 

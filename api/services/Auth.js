@@ -15,16 +15,16 @@ class AuthService {
   static async signIn({ userName, password, fingerprint }) {
     const userData = await UserRepository.getUserData(userName);
     if (!userData) {
-      throw new NotFound("Пользователь не найден!");
+      throw new NotFound("Пользователь не найден");
     }
 
     const isPasswordValid = bcrypt.compareSync(password, userData.password);
 
     if (!isPasswordValid) {
-      throw new Forbidden("Неверное имя или пароль!");
+      throw new Forbidden("Неверное имя или пароль");
     }
 
-    const payload = { userName, role: userData.role, id: userData.id };
+    const payload = { role: userData.role, id: userData.id, userName };
 
     const accessToken = await TokenService.generateAccessToken(payload);
     const refreshToken = await TokenService.generateRefreshToken(payload);
@@ -45,7 +45,7 @@ class AuthService {
   static async signUp({ userName, password, fingerprint, role }) {
     const userData = await UserRepository.getUserData(userName);
     if (userData) {
-      throw new Conflict("Пользователь с таким именем уже существует!");
+      throw new Conflict("Пользователь с таким именем уже существует");
     }
 
     const hashedPassword = bcrypt.hashSync(password, 8);
@@ -87,11 +87,11 @@ class AuthService {
     );
 
     if (!refreshSession) {
-      throw new Forbidden();
+      throw new Unauthorized();
     }
 
     if (refreshSession.finger_print !== fingerprint.hash) {
-      console.log("Несанкционированная попытка обновления токенов");
+      console.log("Попытка несанкционированного обновления токенов");
       throw new Forbidden();
     }
 
