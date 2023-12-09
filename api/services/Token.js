@@ -17,12 +17,12 @@ class TokenService {
     });
   }
 
-  static async verifyAccessToken(payload) {
-    return await jwt.verify(payload, process.env.ACCESS_TOKEN_SECRET);
+  static async verifyAccessToken(accessToken) {
+    return await jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
   }
 
-  static async verifyRefreshToken(payload) {
-    return await jwt.verify(payload, process.env.REFRESH_TOKEN_SECRET);
+  static async verifyRefreshToken(refreshToken) {
+    return await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
   }
 
   static async checkAccess(req, _, next) {
