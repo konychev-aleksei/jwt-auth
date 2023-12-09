@@ -5,12 +5,6 @@ const inMemoryJWTService = () => {
   let inMemoryJWT = null;
   let refreshTimeoutId = null;
 
-  window.addEventListener("storage", (event) => {
-    if (event.key === config.LOGOUT_STORAGE_KEY) {
-      inMemoryJWT = null;
-    }
-  });
-
   const refreshToken = (expiration) => {
     const timeoutTrigger = expiration - 10000;
 
