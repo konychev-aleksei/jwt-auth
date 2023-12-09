@@ -79,13 +79,6 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    window.addEventListener("storage", (event) => {
-      if (event.key === config.LOGOUT_STORAGE_KEY) {
-        inMemoryJWT.deleteToken();
-        setIsUserLogged(false);
-      }
-    });
-
     AuthClient.post("/refresh")
       .then((res) => {
         const { accessToken, accessTokenExpiration } = res.data;
@@ -98,6 +91,21 @@ const AuthProvider = ({ children }) => {
         setIsAppReady(true);
         setIsUserLogged(false);
       });
+  }, []);
+
+  useEffect(() => {
+    const handlePersistedLogOut = (event) => {
+      if (event.key === config.LOGOUT_STORAGE_KEY) {
+        inMemoryJWT.deleteToken();
+        setIsUserLogged(false);
+      }
+    };
+
+    window.addEventListener("storage", handlePersistedLogOut);
+
+    return () => {
+      window.removeEventListener("storage", handlePersistedLogOut);
+    };
   }, []);
 
   return (

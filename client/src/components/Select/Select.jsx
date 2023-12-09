@@ -1,6 +1,7 @@
+import { memo } from "react";
 import style from "./select.module.scss";
 
-export default ({ options = [], ...rest }) => (
+export default memo(({ options = [], ...rest }) => (
   <select {...rest} className={style.select}>
     {options.map(({ id, title }) => (
       <option key={id} value={id}>
@@ -8,4 +9,4 @@ export default ({ options = [], ...rest }) => (
       </option>
     ))}
   </select>
-);
+));
